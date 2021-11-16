@@ -42,12 +42,14 @@ class Person(BaseModel):
     first_name: str = Field(
         ..., 
         min_length=1,
-        max_length=50
+        max_length=50,
+        #example="Miguel Angel"
     )
     last_name: str = Field(
         ..., 
         min_length=1,
-        max_length=50
+        max_length=50,
+        #example="Sanchez Quintana"
     )
     age: int = Field(
         ...,
@@ -58,6 +60,19 @@ class Person(BaseModel):
     is_married: Optional[bool] = Field(default=None)
     email: EmailStr
     website_url: HttpUrl
+
+    class Config:
+        schema_extra = {
+            "example": {
+            "first_name": "Miguel",
+            "last_name": "Sanchez",
+            "age": 20,
+            "hair_color": "black",
+            "is_married": False,
+            "email": "mike@mail.com",
+            "website_url": "https://platzi.com"
+            }
+        }
 
 
 @app.get("/")
