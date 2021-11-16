@@ -24,17 +24,20 @@ class Location(BaseModel):
     city: str = Field(
         ...,
         min_length=2,
-        max_length=50
+        max_length=50,
+        example="Benito Juarez"
     )
     state: str = Field(
         ...,
         min_length=2,
-        max_length=50
+        max_length=50,
+        example="Ciudad de Mexico"
     )
     country: str = Field(
         ...,
         min_length=2,
-        max_length=50
+        max_length=50,
+        example="Mexico"
     )
 
 
