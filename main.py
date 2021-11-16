@@ -2,7 +2,7 @@
 from typing import Optional
 
 # Pydantic
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Enum
 
 # FastAPI
 from fastapi import FastAPI, Body, Query, Path
@@ -12,11 +12,11 @@ app = FastAPI()
 # Models
 
 class HairColor(Enum):
-    white = "white"
-    brown = "brown"
-    black = "black"
-    blonde = "blonde" #Rubio
-    red = "red"
+    white: "white"
+    brown: "brown"
+    black: "black"
+    blonde: "blonde" #Rubio
+    red: "red"
 
 
 class Location(BaseModel):
