@@ -6,9 +6,8 @@ from enum import Enum
 from pydantic import BaseModel, Field, EmailStr, HttpUrl, PositiveInt
 
 # FastAPI
-from fastapi import FastAPI
 from fastapi import status
-from fastapi import FastAPI, Body, Query, Path
+from fastapi import FastAPI, Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -91,6 +90,9 @@ class PersonOut(PersonBase):
     pass
 
 
+class LoginOut(BaseModel):
+    username: str = Field(..., max_length=20, example="Miguel2022")
+
 @app.get("/", status_code=status.HTTP_200_OK)
 def home():
     return {"Hello": "World"}
@@ -145,3 +147,8 @@ def update_person(
     # results.update(location.dict())
     # return results
     return person
+
+
+@app.post("/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
+def login(username: str = Form(...), password: str = Form(...)):
+    return LoginOut(username=username)
