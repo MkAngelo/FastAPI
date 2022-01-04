@@ -60,7 +60,7 @@ class Person(BaseModel):
         le=115,
         example=20
     )
-    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    #hair_color: Optional[HairColor] = Field(default=None, example="black")
     is_married: Optional[bool] = Field(default=None, example=False)
     # email: EmailStr
     # website_url: HttpUrl
@@ -81,13 +81,39 @@ class Person(BaseModel):
     #     }
 
 
+class PersonOut(BaseModel):
+    first_name: str = Field(
+        ..., 
+        min_length=1,
+        max_length=50,
+        example="Miguel Angel"
+    )
+    last_name: str = Field(
+        ..., 
+        min_length=1,
+        max_length=50,
+        example="Sanchez Quintana"
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115,
+        example=20
+    )
+    #hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=False)
+    # email: EmailStr
+    # website_url: HttpUrl
+
+
+
 @app.get("/")
 def home():
     return {"Hello": "World"}
 
 # Request and Response Body
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     return person
 
@@ -128,7 +154,7 @@ def update_person(
         description="This is the person ID",
         gt=0
     ),
-    person: Person = Body(...),
+    person: Person = Body(...)
     #location: Location = Body(...)
 ): 
     #results = person.dict()
