@@ -46,36 +46,39 @@ class Person(BaseModel):
         ..., 
         min_length=1,
         max_length=50,
-        #example="Miguel Angel"
+        example="Miguel Angel"
     )
     last_name: str = Field(
         ..., 
         min_length=1,
         max_length=50,
-        #example="Sanchez Quintana"
+        example="Sanchez Quintana"
     )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example=20
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
-    email: EmailStr
-    website_url: HttpUrl
+    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=False)
+    # email: EmailStr
+    # website_url: HttpUrl
+    password: str = Field(..., min_length=8, example="root1234")
 
-    class Config:
-        schema_extra = {
-            "example": {
-            "first_name": "Miguel",
-            "last_name": "Sanchez",
-            "age": 20,
-            "hair_color": "black",
-            "is_married": False,
-            "email": "mike@mail.com",
-            "website_url": "https://platzi.com"
-            }
-        }
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #         "first_name": "Miguel",
+    #         "last_name": "Sanchez",
+    #         "age": 20,
+    #         #"hair_color": "white",
+    #         "is_married": False,
+    #         "email": "mike@mail.com",
+    #         "website_url": "https://platzi.com",
+    #         "password": "root1234"
+    #         }
+    #     }
 
 
 @app.get("/")
@@ -126,8 +129,9 @@ def update_person(
         gt=0
     ),
     person: Person = Body(...),
-    location: Location = Body(...)
+    #location: Location = Body(...)
 ): 
-    results = person.dict()
-    results.update(location.dict())
-    return results
+    #results = person.dict()
+    # results.update(location.dict())
+    # return results
+    return person
