@@ -100,6 +100,15 @@ class LoginOut(BaseModel):
     tags=["Home"]
 )
 def home():
+    """
+    Home
+
+    This path operation show the home page with the posts
+
+    Do not recieve parameters
+
+    Return the message Hello World
+    """
     return {"Hello": "World"}
 
 # Request and Response Body
@@ -108,9 +117,21 @@ def home():
     path="/person/new", 
     response_model=PersonOut, 
     status_code=status.HTTP_201_CREATED,
-    tags=["Posts"]
+    tags=["Posts"],
+    summary="Create Person in the app"
 )
 def create_person(person: Person = Body(...)):
+    """
+    Create Person
+
+    This path operation creates a person in the app and save the information in the database
+
+    Parameters:
+    - Request body parameter:
+        - **person: Person** -> A model with the first name, last name, age, hair color, and marital status
+    
+    Returns a person model with first name, last name, age, hair color and marital status
+    """
     return person
 
 # Validaciones: Query Parameters
@@ -134,6 +155,18 @@ def show_person(
         description="This is the person age. It's required"
     )
 ):
+    """
+    Show Person
+
+    This path operation search a user in the data base
+
+    Parameters:
+    - Request body parameter:
+        - **name: str** -> Recieve the name of the person 
+        - **age: int** -> Recieve the age of the person 
+
+    Return the user's name and age.
+    """
     return {name: age}
 
 # Validaciones: Path parameters
@@ -148,6 +181,16 @@ persons = [1,2,3,4,5]
 def show_person(
     person_id: int = Path(..., gt=0) #obligatorio
 ):
+    """
+    Show Person
+    
+    This path operation check if the id was already used
+
+    Parameters:
+    - **id: int** -> Recieve the user's id
+
+    Return if the user already exists
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -171,6 +214,17 @@ def update_person(
     person: Person = Body(...)
     #location: Location = Body(...)
 ): 
+    """
+    Update Person
+
+    This path operation update user's information
+
+    Parameters:
+    - Request body parameter:
+        - **Person: Person** -> A model with the first name, last name, age, hair color, and marital status
+    
+    Returns the person with his information updated
+    """
     #results = person.dict()
     # results.update(location.dict())
     # return results
@@ -188,6 +242,18 @@ def login(
     username: str = Form(...), 
     password: str = Form(...)
 ):
+    """
+    Login
+
+    This path allows users login in the app
+
+    Parameters:
+    - Response body parameters:
+        - **Username: str** 
+        - **Password: str**
+    
+    Returns a succesful login
+    """
     return LoginOut(username=username)
 
 # Cookies and Headers Parameters
@@ -216,6 +282,17 @@ def contact(
     user_agent: Optional[str] = Header(default=None),
     ads: Optional[str] = Cookie(default=None)
 ): 
+    """
+    Contact
+
+    This path add a cookie on the browser
+
+    Parameters: 
+    - Request body parameters:
+        - First name, Last name, Email and Message
+
+    Returns the User Agent
+    """
     return user_agent
 
 # Files
@@ -227,6 +304,17 @@ def contact(
 def post_image(
     image: UploadFile = File(...)
 ):
+    """
+    Post Image
+
+    This path allows to adding a picture to the user
+
+    Parameters:
+    - Request body parameters:
+        - **Image**
+    
+    Returns the picture's name, format and size
+    """
     return{
         "Filename":image.filename,
         "Format": image.content_type,
