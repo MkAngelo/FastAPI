@@ -94,19 +94,32 @@ class PersonOut(PersonBase):
 class LoginOut(BaseModel):
     username: str = Field(..., max_length=20, example="Miguel2022")
 
-@app.get("/", status_code=status.HTTP_200_OK)
+@app.get(
+    path="/", 
+    status_code=status.HTTP_200_OK,
+    tags=["Home"]
+)
 def home():
     return {"Hello": "World"}
 
 # Request and Response Body
 
-@app.post("/person/new", response_model=PersonOut, status_code=status.HTTP_201_CREATED)
+@app.post(
+    path="/person/new", 
+    response_model=PersonOut, 
+    status_code=status.HTTP_201_CREATED,
+    tags=["Posts"]
+)
 def create_person(person: Person = Body(...)):
     return person
 
 # Validaciones: Query Parameters
 
-@app.get("/person/detail", status_code=status.HTTP_200_OK)
+@app.get(
+    path="/person/detail", 
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
+)
 def show_person(
     name: Optional[str] = Query(
         None, 
@@ -127,7 +140,11 @@ def show_person(
 
 persons = [1,2,3,4,5]
 
-@app.get("/person/detail/{person_id}", status_code=status.HTTP_200_OK)
+@app.get(
+    path="/person/detail/{person_id}", 
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
+)
 def show_person(
     person_id: int = Path(..., gt=0) #obligatorio
 ):
@@ -139,7 +156,11 @@ def show_person(
     return {person_id: "It exists!"}
 
 # Validaciones: Request Body
-@app.put("/person/{person_id}",status_code=status.HTTP_202_ACCEPTED)
+@app.put(
+    path="/person/{person_id}",
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["Persons"]
+)
 def update_person(
     person_id: int = Path(
         ...,
@@ -157,7 +178,12 @@ def update_person(
 
 # Forms
 
-@app.post("/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
+@app.post(
+    path="/login", 
+    response_model=LoginOut, 
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
+)
 def login(
     username: str = Form(...), 
     password: str = Form(...)
@@ -168,7 +194,8 @@ def login(
 
 @app.post(
     path="/contact",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["About"]
 )
 def contact(
     first_name: str = Form(
@@ -194,7 +221,8 @@ def contact(
 # Files
 
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=["Posts"]
 )
 def post_image(
     image: UploadFile = File(...)
