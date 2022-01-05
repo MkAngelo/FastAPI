@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, EmailStr, HttpUrl, PositiveInt
 
 # FastAPI
 from fastapi import status
-from fastapi import FastAPI, Body, Query, Path, Form
+from fastapi import FastAPI, Body, Query, Path, Form, Header, Cookie
 
 app = FastAPI()
 
@@ -131,7 +131,6 @@ def show_person(
     return {person_id: "It exists!"}
 
 # Validaciones: Request Body
-
 @app.put("/person/{person_id}",status_code=status.HTTP_202_ACCEPTED)
 def update_person(
     person_id: int = Path(
@@ -148,7 +147,38 @@ def update_person(
     # return results
     return person
 
+# Forms
 
 @app.post("/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
-def login(username: str = Form(...), password: str = Form(...)):
+def login(
+    username: str = Form(...), 
+    password: str = Form(...)
+):
     return LoginOut(username=username)
+
+# Cookies and Headers Parameters
+
+@app.post(
+    path="/contact",
+    status_code=status.HTTP_200_OK
+)
+def contact(
+    first_name: str = Form(
+        ...,
+        max_length=20,
+        min_length=1
+    ),
+    last_name: str = Form(
+        ...,
+        max_length=20,
+        min_length=1
+    ),
+    email: EmailStr = Form(...),
+    message: str = Form(
+        ...,
+        min_length=20
+    ),
+    user_agent: Optional[str] = Header(default=None),
+    ads: Optional[str] = Cookie(default=None)
+): 
+    return user_agent
